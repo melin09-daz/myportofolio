@@ -23,3 +23,5 @@ Week 2: Menambahkan section baru yaitu skill serta tampilan yang sedikit diubah.
 3. Karena masih hanya mengandalkan HTML dan CSS, masih belum bisa mengembangkan website dengan lebih kompleks dan variatif. Pada proyek selanjutnya mungkin bisa ditambahkan dengan bahasa lainnya seperti javascript dan ditambah dengan section section lainnya agar isi portofolio lebih menarik.
 
 Dalam mengerjakan proyek ini, saya sama sekali tidak menggunakan bantuan AI. Kebanyakan saya melihat tutorial dari youtube dengan banyaknya variasi yang ada untuk ide ide isi dalam portofolio. Jika masih ada code yang dibingungkan dapat melihat source yang ada di google. 
+
+note: untuk cv akan saya betulkan di tugas selanjutnya
