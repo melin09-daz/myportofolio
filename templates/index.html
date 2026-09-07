@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Amelinda - Portfolio</title>
+    <title>Amelindaa - Portfolio</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
@@ -14,38 +14,135 @@
         <div class="container">
             <a href="#profile" class="brand">Amelinda</a>
             <nav>
-                <a href="#profile">Profile</a>
+                <a href="#profile" id="nav-profile-link">Profile</a>
+                <a href="#skills" id="nav-skills-link">Skills</a>
             </nav>
         </div>
     </header>
 
     <main>
         <section class="hero" id="profile">
-            <div class="container hero-grid">
-                <div class="hero-identity">
-                    <p class="hero-kicker">Computer Science &middot; Universitas Indonesia</p>
-                    <h1>Amelinda Fedora Faragusti</h1>
+            <div class="container hero-grid" id="profile-container">
+                <div class="hero-identity" id="hero-identity-block">
+                    <p class="hero-kicker" id="hero-kicker-text">Computer Science &middot; Universitas Indonesia</p>
+                    <h1 id="hero-title">Amelinda Fedora Faragusti</h1>
                 </div>
-                <div class="hero-photo">
-                    <div class="photo-block"></div>
-                    <img class="avatar" src="/static/img/Melin.png" alt="Photo of Melin">
+                <div class="hero-photo" id="hero-photo-block">
+                    <div class="photo-block" id="photo-accent-bg"></div>
+                    <img class="avatar" id="hero-avatar-img" src="/static/img/Melin.png" alt="Photo of Melin">
                 </div>
-                <div class="hero-details">
-                    <p class="bio">CS student at Universitas Indonesia for longer than planned, now a familiar (and slightly dreaded) face among Fasilkom students as a teaching assistant across several courses.</p>
-                    <dl class="meta-list">
-                        <div class="meta-row">
+                <div class="hero-details" id="hero-details-block">
+                    <p class="bio" id="bio-text">Computer Science student at Universitas Indonesia. Currently focused on exploring data science and artificial intelligence, with a growing interest in how these fields can solve real-world problems. Always looking for new projects to learn from.</p>
+                    <dl class="meta-list" id="meta-details-list">
+                        <div class="meta-row" id="meta-npm-row">
                             <dt>NPM</dt>
                             <dd>2506540475</dd>
                         </div>
-                        <div class="meta-row">
+                        <div class="meta-row" id="meta-program-row">
                             <dt>Program</dt>
                             <dd>S1 Sistem Informasi</dd>
                         </div>
                     </dl>
-                    <div class="social-links">
-                        <a href="https://github.com/melin09-daz" class="social-link">GitHub</a>
-                        <a href="https://www.linkedin.com/in/melindafe/" class="social-link">LinkedIn</a>
-                        <a href="mailto:amelindafedora09@gmail.com" class="social-link">Email</a>
+                    <div class="social-links" id="social-links-group">
+                        <a href="https://github.com/melin09-daz" class="social-link" id="social-github-link">GitHub</a>
+                        <a href="https://www.linkedin.com/in/melindafe/" class="social-link" id="social-linkedin-link">LinkedIn</a>
+                        <a href="mailto:amelindafedora09@gmail.com" class="social-link" id="social-email-link">Email</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="skills-sec" id="skills">
+            <div class="container" id="skills-container">
+                <div class="sec-header" id="skills-header">
+                    <p class="sec-kicker" id="skills-kicker">Tools &amp; Expertise</p>
+                    <h2 class="sec-title" id="skills-title">Skills</h2>
+                    <p class="sec-desc" id="skills-desc">Technologies I'm skilled in and comfortable working with</p>
+                </div>
+
+                <!-- Carousal Container (Capsule Shape) -->
+                <div class="pill-carousal-wrapper" id="skills-carousal">
+                    <div class="pill-carousal-track" id="skills-track">
+                        <!-- First Group -->
+                        <div class="pill-group" id="pill-group-1">
+                            <div class="pill-logo-item" id="pill-item-figma-1">
+                                <img class="pill-logo-icon" id="logo-img-figma-1" src="/static/img/figma1.png" alt="logo Figma" width="32" height="32">
+                            </div>
+
+                            <div class="pill-logo-item" id="pill-item-python-1">
+                                <img class="pill-logo-icon" id="logo-img-python-1" src="/static/img/python1.png" alt="logo Python" width="32" height="32">
+                            </div>
+
+                            <div class="pill-logo-item" id="pill-item-css-1">
+                                <img class="pill-logo-icon" id="logo-img-css-1" src="/static/img/css3.png" alt="logo CSS3" width="32" height="32">
+                            </div>
+
+                            <div class="pill-logo-item" id="pill-item-html-1">
+                                <img class="pill-logo-icon" id="logo-img-html-1" src="/static/img/html5.png" alt="logo HTML5" width="32" height="32">
+                            </div>
+
+                            <div class="pill-logo-item" id="pill-item-java-1">
+                                <img class="pill-logo-icon" id="logo-img-java-1" src="/static/img/java1.png" alt="logo Java" width="32" height="32">
+                            </div>
+
+                            <div class="pill-logo-item" id="pill-item-pandas-1">
+                                <img class="pill-logo-icon" id="logo-img-pandas-1" src="/static/img/pandas1.png" alt="logo Pandas" width="32" height="32">
+                            </div>
+                        </div>
+
+                        <!-- Second Group (Duplicate for continous scroll) -->
+                        <div class="pill-group" id="pill-group-2" aria-hidden="true">
+                            <div class="pill-logo-item">
+                                <img class="pill-logo-icon" src="/static/img/figma1.png" alt="" width="32" height="32">
+                            </div>
+
+                            <div class="pill-logo-item">
+                                <img class="pill-logo-icon" src="/static/img/python1.png" alt="" width="32" height="32">
+                            </div>
+
+                            <div class="pill-logo-item">
+                                <img class="pill-logo-icon" src="/static/img/css3.png" alt="" width="32" height="32">
+                            </div>
+
+                            <div class="pill-logo-item">
+                                <img class="pill-logo-icon" src="/static/img/html5.png" alt="" width="32" height="32">
+                            </div>
+
+                            <div class="pill-logo-item">
+                                <img class="pill-logo-icon" src="/static/img/java1.png" alt="" width="32" height="32">
+                            </div>
+
+                            <div class="pill-logo-item">
+                                <img class="pill-logo-icon" src="/static/img/pandas1.png" alt="" width="32" height="32">
+                            </div>
+                        </div>
+
+                        <!-- Third Group (Duplicate for continous scroll)-->
+                        <div class="pill-group" id="pill-group-3" aria-hidden="true">
+                            <div class="pill-logo-item">
+                                <img class="pill-logo-icon" src="/static/img/figma1.png" alt="" width="32" height="32">
+                            </div>
+
+                            <div class="pill-logo-item">
+                                <img class="pill-logo-icon" src="/static/img/python1.png" alt="" width="32" height="32">
+                            </div>
+
+                            <div class="pill-logo-item">
+                                <img class="pill-logo-icon" src="/static/img/css3.png" alt="" width="32" height="32">
+                            </div>
+
+                            <div class="pill-logo-item">
+                                <img class="pill-logo-icon" src="/static/img/html5.png" alt="" width="32" height="32">
+                            </div>
+
+                            <div class="pill-logo-item">
+                                <img class="pill-logo-icon" src="/static/img/java1.png" alt="" width="32" height="32">
+                            </div>
+
+                            <div class="pill-logo-item">
+                                <img class="pill-logo-icon" src="/static/img/pandas1.png" alt="" width="32" height="32">
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
