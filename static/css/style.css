@@ -323,3 +323,54 @@ h1, h2, .brand {
     font-size: 0.9rem;
     background-color: var(--paper);
 }
+
+/* Layout Responsive on Tablet/HP */
+@media (max-width: 768px) {
+    .hero {
+        padding: 3rem 0 3.5rem;
+    }
+
+    .hero-grid {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+            "photo"
+            "identity"
+            "details";
+        gap: 2rem;
+        text-align: left;
+    }
+
+    .hero-photo {
+        max-width: 240px;
+        margin: 0 auto;
+    }
+
+    .photo-block {
+        top: 0.85rem;
+        left: 0.85rem;
+    }
+
+    .skills-sec {
+        padding: 2.5rem 0 3.5rem;
+    }
+
+    .pill-carousal-wrapper {
+        height: 60px;
+        padding: 0 1 2.5rem;
+        max-width: 95%;
+    }
+
+    .pill-group {
+        gap: 2.25rem;
+        padding-right: 2.25rem;
+    }
+
+    .pill-logo-icon {
+        width: 26px;
+        height: 26px;
+    }
+
+    .pill-logo-text {
+        font-size: 1.05rem;
+    }
+}
