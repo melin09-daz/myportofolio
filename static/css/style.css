@@ -232,28 +232,45 @@ h1, h2, .brand {
     transform: translateY(2px);
 }
 
-/* Link Social Med */
+/* Social Media Button */
 .social-links {
     display: flex;
-    gap: 0.5rem;
+    gap: 0.65rem;
     flex-wrap: wrap;
+    align-items: center;
 }
 
-.social-link {
-    display: inline-block;
+.social-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
     font-size: 0.85rem;
-    font-weight: 600;
+    font-weight: 700;
+    font-family: "Space Grotesk", sans-serif;
     text-decoration: none;
-    color: var(--paper);
-    background-color: var(--ink);
-    border-radius: var(--radius);
-    padding: 0.5rem 1.1rem;
-    transition: all 0.2s ease;
+    color: var(--ink);
+    background-color: var(--paper);
+    border: 1.5px solid var(--ink);
+    border-radius: 9999px;
+    padding: 0.45rem 1rem;
+    box-shadow: 2px 2px 0px var(--ink);
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.social-link:hover {
-    background-color: var(--accent);
+.social-btn:hover {
+    background-color: var(--ink);
+    color: var(--paper);
     transform: translateY(-2px);
+    box-shadow: 3px 3px 0px var(--accent);
+}
+
+.social-icon {
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+}
+
+.social-btn:hover .social-icon {
+    transform: scale(1.1);
 }
 
 /* Photo Styling */
