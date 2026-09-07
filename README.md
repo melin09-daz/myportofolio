@@ -11,6 +11,7 @@ Website ini merupakan portofolio pribadi yang dibuat untuk menampilkan profil di
 ## Proses Mingguan
 
 Week 1: Setup awal Django beserta template portofolio.
+
 Week 2: Menambahkan section baru yaitu skill serta tampilan yang sedikit diubah.
 
 ### Tugas 1 
