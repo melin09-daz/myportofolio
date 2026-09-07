@@ -20,7 +20,7 @@
         </div>
     </header>
 
-    <main>
+    <main id="main-content">
         <section class="hero" id="profile">
             <div class="container hero-grid" id="profile-container">
                 <div class="hero-identity" id="hero-identity-block">
@@ -33,16 +33,28 @@
                 </div>
                 <div class="hero-details" id="hero-details-block">
                     <p class="bio" id="bio-text">Computer Science student at Universitas Indonesia. Currently focused on exploring data science and artificial intelligence, with a growing interest in how these fields can solve real-world problems. Always looking for new projects to learn from.</p>
-                    <dl class="meta-list" id="meta-details-list">
-                        <div class="meta-row" id="meta-npm-row">
-                            <dt>NPM</dt>
-                            <dd>2506540475</dd>
+                    <div class="hero-meta-wrapper" id="hero-meta-wrapper">
+                        <div class="meta-cards-group" id="meta-cards-group">
+                            <div class="meta-card" id="meta-npm-card">
+                                <span class="meta-card-label">NPM</span>
+                                <span class="meta-card-value" id="npm-text-value">2506540475</span>
+                            </div>
+                            <div class="meta-card" id="meta-program-card">
+                                <span class="meta-card-label">Program</span>
+                                <span class="meta-card-value">S1 Sistem Informasi</span>
+                            </div>
                         </div>
-                        <div class="meta-row" id="meta-program-row">
-                            <dt>Program</dt>
-                            <dd>S1 Sistem Informasi</dd>
+                        <div class="hero-actions" id="hero-actions-group">
+                            <a href="#" download="CV_AmelindaFedoraFaragusti.pdf" class="btn-download-cv" id="btn-download-cv">
+                                <svg class="download-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                    <polyline points="7 10 12 15 17 10"/>
+                                    <line x1="12" y1="15" x2="12" y2="3"/>
+                                </svg>
+                                <span>Download CV</span>
+                            </a>
                         </div>
-                    </dl>
+                    </div>
                     <div class="social-links" id="social-links-group">
                         <a href="https://github.com/melin09-daz" class="social-link" id="social-github-link">GitHub</a>
                         <a href="https://www.linkedin.com/in/melindafe/" class="social-link" id="social-linkedin-link">LinkedIn</a>
