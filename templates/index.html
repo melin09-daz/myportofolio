@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Amelindaa - Portfolio</title>
+    <title>{{ name }} - Portofolio</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
@@ -12,10 +12,11 @@
 <body>
     <header class="site-header" id="site-header">
         <div class="container">
-            <a href="#profile" class="brand" id="brand-link">Amelinda</a>
+            <a href="{% url 'main:show_main' %}" class="brand">{{ name }}</a>
             <nav id="main-nav" aria-label="Main Navigation">
-                <a href="#profile" id="nav-profile-link">Profile</a>
+                <a href="{% url 'main:show_main' %}">Profile</a>
                 <a href="#skills" id="nav-skills-link">Skills</a>
+                <a href="{% url 'main:show_experience' %}">Experience</a>
             </nav>
         </div>
     </header>
@@ -25,23 +26,23 @@
             <div class="container hero-grid" id="profile-container">
                 <div class="hero-identity" id="hero-identity-block">
                     <p class="hero-kicker" id="hero-kicker-text">Computer Science &middot; Universitas Indonesia</p>
-                    <h1 id="hero-title">Amelinda Fedora Faragusti</h1>
+                    <h1>{{ name }}</h1>
                 </div>
                 <div class="hero-photo" id="hero-photo-block">
                     <div class="photo-block" id="photo-accent-bg"></div>
-                    <img class="avatar" id="hero-avatar-img" src="/static/img/Melin.png" alt="Photo of Melin">
+                    <img class="avatar" src="/static/img/Melin.png" alt="Photo of {{ name }}">
                 </div>
                 <div class="hero-details" id="hero-details-block">
-                    <p class="bio" id="bio-text">Computer Science student at Universitas Indonesia. Currently focused on exploring data science and artificial intelligence, with a growing interest in how these fields can solve real-world problems. Always looking for new projects to learn from.</p>
+                    <p class="bio">{{ bio }}</p>
                     <div class="hero-meta-wrapper" id="hero-meta-wrapper">
                         <div class="meta-cards-group" id="meta-cards-group">
                             <div class="meta-card" id="meta-npm-card">
                                 <span class="meta-card-label">NPM</span>
-                                <span class="meta-card-value" id="npm-text-value">2506540475</span>
+                                <dd>{{ npm }}</dd>
                             </div>
                             <div class="meta-card" id="meta-program-card">
                                 <span class="meta-card-label">Program</span>
-                                <span class="meta-card-value">S1 Sistem Informasi</span>
+                                <dd>{{ study_program }}</dd>
                             </div>
                         </div>
                         <div class="hero-actions" id="hero-actions-group">
@@ -172,7 +173,7 @@
 
     <footer class="site-footer">
         <div class="container">
-            <p>&copy; 2026 Amelinda. Fakultas Ilmu Komputer, Universitas Indonesia.</p>
+            <p>&copy; 2026 {{ name }}. Fakultas Ilmu Komputer, Universitas Indonesia.</p>
         </div>
     </footer>
 </body>
