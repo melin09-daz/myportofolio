@@ -464,6 +464,30 @@ h1, h2, .brand {
     background-color: #fff;
     border: 1px solid var(--line);
     border-radius: var(--radius);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.experience-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.experience-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.experience-logo {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+    border-radius: 4px;
 }
 
 .experience-category {
@@ -487,6 +511,17 @@ h1, h2, .brand {
     margin-top: 1rem;
     font-size: 0.85rem;
     font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.status-ongoing {
+    color: #0f766e;
+}
+
+.status-completed {
+    color: #475569;
 }
 
 /* Layout Responsive on Tablet/HP */
