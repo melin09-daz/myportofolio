@@ -1,5 +1,5 @@
 from django.shortcuts import render
-
+from django.db.utils import OperationalError, ProgrammingError
 from main.models import Experience
 
 
@@ -16,6 +16,16 @@ def show_main(request):
 
 
 def show_experience(request):
+    try:
+        experience_list = list(Experience.objects.all())
+    except (OperationalError, ProgrammingError):
+        from django.core.management import call_command
+        try:
+            call_command('migrate', interactive=False)
+            experience_list = list(Experience.objects.all())
+        except Exception:
+            experience_list = []
+            
     context = {
         "name": "Amelinda Fedora Faragusti",
         "experience_list": Experience.objects.all(),

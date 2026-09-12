@@ -13,8 +13,9 @@
     <header class="site-header" id="site-header">
         <div class="container">
             <a href="{% url 'main:show_main' %}" class="brand">{{ name }}</a>
-            <nav>
+            <nav id="main-nav" aria-label="Main Navigation">
                 <a href="{% url 'main:show_main' %}">Profile</a>
+                <a href="{% url 'main:show_main' %}#skills">Skills</a>
                 <a href="{% url 'main:show_experience' %}">Experience</a>
             </nav>
         </div>
@@ -27,27 +28,50 @@
                 <h1>Experience</h1>
 
                 <div class="experience-grid">
-                    {% for experience in experience_list %}
-                        <article class="experience-card">
-                            <span class="experience-category">
-                                {{ experience.get_category_display }}
-                            </span>
-                            <h2>{{ experience.title }}</h2>
-                            <p class="experience-description">
-                                {{ experience.description }}
-                            </p>
+                    {% if experience_list %}
+                        {% for experience in experience_list %}
+                            <article class="experience-card">
+                                <div class="experience-card-header">
+                                    <span class="experience-category">
+                                        {{ experience.get_category_display }}
+                                    </span>
+                                    {% if experience.logo %}
+                                        <img src="{{ experience.logo }}" alt="Logo" class="experience-logo" width="28" height="28">
+                                    {% endif %}
+                                </div>
+                                <h2>{{ experience.title }}</h2>
+                                <p class="experience-description">
+                                    {{ experience.description }}
+                                </p>
 
-                            {% if experience.is_ongoing %}
-                                <p class="experience-status">Sedang berlangsung</p>
-                            {% else %}
-                                <p class="experience-status">Selesai</p>
-                            {% endif %}
-                        </article>
-                    {% empty %}
+                                {% if experience.is_ongoing %}
+                                    <p class="experience-status status-ongoing">
+                                        {% if experience.start_year %}
+                                            {{ experience.start_year }} - Sekarang (Sedang berlangsung)
+                                        {% else %}
+                                            Sedang berlangsung
+                                        {% endif %}
+                                    </p>
+                                {% else %}
+                                    <p class="experience-status status-completed">
+                                        {% if experience.start_year and experience.end_year %}
+                                            {{ experience.start_year }} - {{ experience.end_year }} (Selesai)
+                                        {% elif experience.start_year %}
+                                            {{ experience.start_year }} (Selesai)
+                                        {% elif experience.end_year %}
+                                            Selesai {{ experience.end_year }}
+                                        {% else %}
+                                            Selesai
+                                        {% endif %}
+                                    </p>
+                                {% endif %}
+                            </article>
+                        {% endfor %}
+                    {% else %}
                         <p class="empty-state">
                             Belum ada pengalaman yang ditambahkan.
                         </p>
-                    {% endfor %}
+                    {% endif %}
                 </div>
             </div>
         </section>
