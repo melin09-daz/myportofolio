@@ -44,21 +44,24 @@ class Experience(models.Model):
     
     @property
     def period_display(self):
-        # 'Sedang berlangsung' jika aktif, atau tahun awal - akhir jika sudah lewat.
+        # Menampilkan periode dengan bulan dan tahun
+        start_str = self.format_date(self.start_month, self.start_year)
+        end_str = self.format_date(self.end_month, self.end_year)
+
         if self.is_ongoing:
-            if self.start_year:
-                return f"{self.start_year} - Sekarang (Sedang berlangsung)"
+            if start_str:
+                return f"{start_str} - Sekarang (Sedang berlangsung)"
             return "Sedang berlangsung"
-        
-        # Jika sudah selesai/lewat
-        if self.start_year and self.end_year:
-            if self.start_year == self.end_year:
-                return f"{self.start_year} (Selesai)"
-            return f"{self.start_year} - {self.end_year} (Selesai)"
-        elif self.start_year:
-            return f"{self.start_year} (Selesai)"
-        elif self.end_year:
-            return f"Selesai {self.end_year}"
+
+        # Jika sudah selesai
+        if start_str and end_str:
+            if start_str == end_str:
+                return f"{start_str} (Selesai)"
+            return f"{start_str} - {end_str}"
+        elif start_str:
+            return f"{start_str} (Selesai)"
+        elif end_str:
+            return f"Selesai {end_str}"
         return "Selesai"
     
     
