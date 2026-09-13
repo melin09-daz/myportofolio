@@ -44,27 +44,9 @@
                                     {{ experience.description }}
                                 </p>
 
-                                {% if experience.is_ongoing %}
-                                    <p class="experience-status status-ongoing">
-                                        {% if experience.start_year %}
-                                            {{ experience.start_year }} - Sekarang (Sedang berlangsung)
-                                        {% else %}
-                                            Sedang berlangsung
-                                        {% endif %}
-                                    </p>
-                                {% else %}
-                                    <p class="experience-status status-completed">
-                                        {% if experience.start_year and experience.end_year %}
-                                            {{ experience.start_year }} - {{ experience.end_year }} (Selesai)
-                                        {% elif experience.start_year %}
-                                            {{ experience.start_year }} (Selesai)
-                                        {% elif experience.end_year %}
-                                            Selesai {{ experience.end_year }}
-                                        {% else %}
-                                            Selesai
-                                        {% endif %}
-                                    </p>
-                                {% endif %}
+                                <p class="experience-status {% if experience.is_ongoing %}status-ongoing{% else %}status-completed{% endif %}">
+                                    {{ experience.period_display }}
+                                </p>
                             </article>
                         {% endfor %}
                     {% else %}
