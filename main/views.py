@@ -1,7 +1,6 @@
 from django.shortcuts import render
 from django.db.utils import OperationalError, ProgrammingError
-from main.models import Experience
-
+from main.models import Experience, Project
 
 def show_main(request):
     context = {
@@ -13,7 +12,6 @@ def show_main(request):
         ),
     }
     return render(request, "index.html", context)
-
 
 def show_experience(request):
     try:
@@ -28,6 +26,23 @@ def show_experience(request):
             
     context = {
         "name": "Amelinda Fedora Faragusti",
-        "experience_list": Experience.objects.all(),
+        "experience_list": experience_list,
     }
     return render(request, "experience.html", context)
+
+def show_project(request):
+    try:
+        project_list = list(Project.objects.all())
+    except (OperationalError, ProgrammingError):
+        from django.core.management import call_command
+        try:
+            call_command('migrate', interactive=False)
+            project_list = list(Project.objects.all())
+        except Exception:
+            project_list = []
+            
+    context = {
+        "name": "Amelinda Fedora Faragusti",
+        "experience_list": project_list,
+    }
+    return render(request, "project.html", context)
