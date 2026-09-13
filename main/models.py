@@ -63,6 +63,26 @@ class Experience(models.Model):
         elif end_str:
             return f"Selesai {end_str}"
         return "Selesai"
+
+class Project(models.Model):
+    PROJECT_CHOICES = [
+        ('web-dev', 'Web Development'),
+        ('mobile-dev', 'Mobile Development'),
+        ('data-science', 'Data Science & AI'),
+        ('ui-ux', 'UI/UX Design'),
+        ('iot', 'Internet of Things'),
+        ('other', 'Other'),
+    ]
     
-    
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    title = models.CharField(max_length=255)
+    description = models.TextField()
+    category = models.CharField(max_length=50, choices=PROJECT_CHOICES, default='web-dev')
+    tech_stack = models.CharField(max_length=255, blank=True, help_text="Contoh: Django, Python, PostgreSQL, Tailwind")
+    repository_url = models.URLField(blank=True, null=True, help_text="Link ke GitHub/GitLab repository")
+    demo_url = models.URLField(blank=True, null=True, help_text="Link ke live demo aplikasi")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title
     
