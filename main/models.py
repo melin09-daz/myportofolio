@@ -21,10 +21,26 @@ class Experience(models.Model):
     logo = models.CharField(max_length=255, blank=True, default='') # Kasih logo
     start_year = models.PositiveIntegerField(blank=True, null=True) # Tahun awal mulai
     end_year = models.PositiveIntegerField(blank=True, null=True) # Tahun akhir
+    start_month = models.PositiveSmallIntegerField(blank=True, null=True, help_text="Bulan awal (1-12)") # Bulan awal
+    end_month = models.PositiveSmallIntegerField(blank=True, null=True, help_text="Bulan akhir (1-12)") # Bulan akhir
     is_ongoing = models.BooleanField(default=True) # Condition
+    
+    MONTH_NAMES = {
+        1: 'Januari', 2: 'Februari', 3: 'Maret', 4: 'April',
+        5: 'Mei', 6: 'Juni', 7: 'Juli', 8: 'Agustus',
+        9: 'September', 10: 'Oktober', 11: 'November', 12: 'Desember'
+    }
     
     def __str__(self):
         return self.title
+    
+    def format_date(self, month, year):
+        # Memformat pasangan bulan dan tahun, misal: 'Januari 2024' atau '2024'
+        if month and year and month in self.MONTH_NAMES:
+            return f"{self.MONTH_NAMES[month]} {year}"
+        if year:
+            return str(year)
+        return "" 
     
     @property
     def period_display(self):
