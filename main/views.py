@@ -43,6 +43,6 @@ def show_project(request):
             
     context = {
         "name": "Amelinda Fedora Faragusti",
-        "experience_list": project_list,
+        "project_list": project_list,
     }
     return render(request, "project.html", context)
