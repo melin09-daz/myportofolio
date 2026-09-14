@@ -24,4 +24,56 @@ Week 2: Menambahkan section baru yaitu skill serta tampilan yang sedikit diubah.
 
 Dalam mengerjakan proyek ini, saya sama sekali tidak menggunakan bantuan AI. Kebanyakan saya melihat tutorial dari youtube dengan banyaknya variasi yang ada untuk ide ide isi dalam portofolio. Jika masih ada code yang dibingungkan dapat melihat source yang ada di google. 
 
-note: untuk cv akan saya betulkan di tugas selanjutnya
+### Tugas 2
+
+1. Pada saat membuka halaman protofolio baru di browser (misalnya https://.../project/ atau https://.../experience/), Django memproses permintaan tersebut melalui siklus MVT (Model View Template). Alur prosesnya:
+- Browser user mengirim HTTP GET Request ke server.
+- Membaca domain utama, mengarahkan rute ke modul aplikasi (urls.py Proyek (portofolio/urls.py)).
+- Mencocokan endpoint ('project/') dengan fungsi View (urls.py Aplikasi (main/urls.py)).
+- Meminta data ke Model (models.py ke Database SQLite).
+- Mengembalikan data objek/query.
+- Mengemas data ke dalam Dictionary (Context) lalu memanggil Template.
+- Django Template Engine (DTE) memasukkan data ke HTML (Template HTML (templates/project.html)).
+- Menghasilkan HTTP Response utuh (HTML, CSS, dan Gambar) (views.py)
+- Broswer user menerima kode HTML dan merender halaman visual kepada pengguna.
+
+Peran masing-masing komponen dalam proyek:
+- urls.py Proyek (portofolio/urls.py) : Ketika permintaan HTTP masuk, memeriksa awalan URL dan menggunakan fungsi include() untuk meneruskan rute tersebut ke urls.py milik main.
+- urls.py Aplikasi (main/urls.py) : Mencocokkan path URL yang diminta (contoh: '' untuk halaman utama, 'experience/' untuk pengalaman, atau 'project/' untuk proyek) dengan fungsi controller yang ada di views.py.
+- views.py : Menerima objek request dari browser, memiliki hubungan dengan models.py untuk mengambil data yang dibutuhkan dari database, mengumpulkan data ke dalam sebuah kamus Python yang disebut context (contoh: {'name': '...', 'project_list': project_list}), serta memanggil fungsi render() untuk menggabungkan data konteks dengan template HTML yang sesuai.
+- models.py : mendefinisikan struktur, tipe data, serta aturan dari data yang disimpan (contoh: atribut title, description, category, tech_stack, repository_url).
+- template : Template menerima data dari view, menyusunnya ke dalam kerangka web yang sudah di styling dengan CSS/gambar, dan menghasilkan halaman web yang siap diakses oleh browser pengguna.
+
+2. Jika di Template (Hardcoded), setiap kali ingin menambah pengalaman, memperbaiki typo judul proyek, atau mengganti link GitHub, developer harus membuka file HTML, mencari baris kode yang tepat di antara ratusan tag <div>, lalu melakukan commit dan deploy ulang aplikasi. Akibatnya, dapat merusak struktur tag HTML atau tata letak CSS. Dengan menggunakan Model, data terpisah dari tampilan. Kita cukup menambahkan atau mengedit data melalui Django Admin (/admin) atau Django Shell di terminal tanpa mengubah satu baris pun kode HTML. Struktur antarmuka tetap aman dan bebas dari risiko broken layout.
+
+3. Perbedaan antara perintah makemigrations dan migrate pada Django:
+yang diperiksa:
+- python manage.py makemigrations: Membandingkan kode di models.py saat ini dengan berkas migrasi sebelumnya.
+- python manage.py migrate: Memeriksa berkas migrasi mana yang belum pernah dicatat pada tabel django_migrations di database.
+
+Output / Hasil:
+- python manage.py makemigrations: Berkas Python baru di folder migrations/ (contoh: 0003_add_field_xyz.py).
+- python manage.py migrate: Perubahan tabel, kolom, atau relasi langsung pada mesin database (SQLite, PostgreSQL, MySQL, dll.).
+
+Hubungan dengan Database:
+- python manage.py makemigrations: Belum menyentuh database sama sekali.
+- python manage.py migrate: Mengubah skema database secara langsung (menjalankan perintah SQL seperti CREATE TABLE, ALTER TABLE, dll.).
+
+Keduanya harus dijalankan berurutan ketika kita mengubah struktur class di models.py:
+- python manage.py makemigrations (merekam perubahan ke berkas migrasi).
+- python manage.py migrate (menerapkan berkas migrasi tersebut ke database).
+
+Contoh:
+```python
+# main/models.py
+class Project(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    title = models.CharField(max_length=255)
+    description = models.TextField()
+    category = models.CharField(max_length=50)
+    repository_url = models.URLField(blank=True, null=True)
+```
+Ketika kita membuat class model Project baru dari awal:
+- makemigrations: Mencatat operasi CreateModel(name='Project', fields=...) ke berkas 0004_project.py.
+- migrate: Menjalankan SQL CREATE TABLE main_project (...) di dalam database. 
+Tanpa perintah ini, akan terjadi error ketika view mencoba mengambil data dari model Project.
