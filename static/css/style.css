@@ -524,6 +524,50 @@ h1, h2, .brand {
     color: #475569;
 }
 
+.project-tech-stack {
+    margin-top: 0.75rem;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.project-tech-stack strong {
+    color: var(--ink);
+}
+
+.project-links {
+    margin-top: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.project-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--ink);
+    background-color: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    text-decoration: none;
+    transition: background 0.15s ease;
+}
+
+.project-btn-icon {
+    width: 14px;
+    height: 14px;
+    object-fit: contain;
+    display: inline-block;
+    flex-shrink: 0;
+}
+
+.project-btn:hover {
+    background-color: #f1f5f9;
+}
+
 /* Layout Responsive on Tablet/HP */
 @media (max-width: 768px) {
     .hero {
