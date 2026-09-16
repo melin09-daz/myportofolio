@@ -1,87 +1,73 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% extends "base.html" %}
+{% block meta %}
     <title>Projects - {{ name }}</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/static/css/style.css">
-</head>
-<body>
-    <header class="site-header" id="site-header">
-        <div class="container">
-            <a href="{% url 'main:show_main' %}" class="brand">{{ name }}</a>
-            <nav id="main-nav" aria-label="Main Navigation">
-                <a href="{% url 'main:show_main' %}">Profile</a>
-                <a href="{% url 'main:show_main' %}#skills">Skills</a>
-                <a href="{% url 'main:show_experience' %}">Experience</a>
-                <a href="{% url 'main:show_project' %}">Projects</a>
-            </nav>
-        </div>
-    </header>
-
-    <main id="main-content">
-        <section class="experience-section" id="projects">
+{% endblock meta %}
+{% block content %}
+    <main>
+        <section class="experience-section" id="experience">
             <div class="container">
-                <p class="section-kicker">Proyek yang pernah saya buat</p>
-                <h1>Projects</h1>
+                <p class="section-kicker">Karya yang saya bangun</p>
+                <div class="project-header">
+                    <h1>Projects</h1>
+                    <a href="{% url 'main:create_project' %}"
+                       class="button project-add-button">
+                        <span aria-hidden="true">+</span>
+                        Tambah Proyek
+                    </a>
+                </div>
 
-                <div class="experience-grid">
-                    {% if project_list %}
-                        {% for project in project_list %}
-                            <article class="experience-card">
-                                <div>
-                                    <div class="experience-card-header">
-                                        <span class="experience-category">
-                                            {{ project.get_category_display }}
-                                        </span>
+                <form method="get"
+                      action="{% url 'main:show_project' %}"
+                      class="project-search">
+                    <input type="search"
+                           name="title"
+                           value="{{ title_query }}"
+                           placeholder="Cari berdasarkan nama proyek"
+                           class="project-search__input"
+                           aria-label="Cari berdasarkan nama proyek">
+                    <button type="submit" class="button">Cari</button>
+                </form>
+
+                <div class="experience-grid project-grid">
+                    {% for project in project_list %}
+                        <article class="experience-card">
+                            <div class="experience-card-header">
+                                <span class="experience-category">
+                                    {{ project.get_category_display }}
+                                </span>
+                            </div>
+                            <h2>{{ project.title }}</h2>
+                            <p class="experience-description">{{ project.description }}</p>
+
+                            {% if project.tech_stack %}
+                                <div class="project-tech-stack">
+                                    <strong>Tech Stack:</strong> {{ project.tech_stack }}
+                                </div>
+                            {% endif %}
+
+                            {% if project.repository_url or project.demo_url %}
+                                <div class="project-card-actions">
+                                    <div class="project-actions">
+                                        {% if project.repository_url %}
+                                            <a href="{{ project.repository_url }}" class="button" target="_blank" rel="noopener noreferrer">Repository</a>
+                                        {% endif %}
+                                        {% if project.demo_url %}
+                                            <a href="{{ project.demo_url }}" class="button" target="_blank" rel="noopener noreferrer">Live Demo</a>
+                                        {% endif %}
+                                        {% include "components/project_delete_modal.html" with project=project %}
                                     </div>
-                                    <h2>{{ project.title }}</h2>
-                                    <p class="experience-description">
-                                        {{ project.description }}
-                                    </p>
-
-                                    {% if project.tech_stack %}
-                                        <div class="project-tech-stack">
-                                            <strong>Tech Stack:</strong> {{ project.tech_stack }}
-                                        </div>
-                                    {% endif %}
                                 </div>
-
-                                <div>
-                                    {% if project.repository_url or project.demo_url %}
-                                        <div class="project-links">
-                                            {% if project.repository_url %}
-                                                <a href="{{ project.repository_url }}" class="project-btn" target="_blank" rel="noopener noreferrer">
-                                                    <img src="/static/img/github.png" alt="Repository" class="project-btn-icon">
-                                                    <span>Repository</span>
-                                                </a>
-                                            {% endif %}
-                                            {% if project.demo_url %}
-                                                <a href="{{ project.demo_url }}" class="project-btn" target="_blank" rel="noopener noreferrer">
-                                                    <img src="/static/img/demo.png" alt="Live Demo" class="project-btn-icon">
-                                                    <span>Live Demo</span>
-                                                </a>
-                                            {% endif %}
-                                        </div>
-                                    {% endif %}
-                                </div>
-                            </article>
-                        {% endfor %}
-                    {% else %}
-                        <p class="empty-state">Belum ada project yang ditambahkan.</p>
-                    {% endif %}
+                            {% endif %}
+                        </article>
+                    {% empty %}
+                        {% if title_query %}
+                            <p class="empty-state">Tidak ada proyek dengan nama tersebut.</p>
+                        {% else %}
+                            <p class="empty-state">Belum ada proyek yang ditambahkan.</p>
+                        {% endif %}
+                    {% endfor %}
                 </div>
             </div>
         </section>
     </main>
-
-    <footer class="site-footer">
-        <div class="container">
-            <p>&copy; 2026 {{ name }}. Fakultas Ilmu Komputer, Universitas Indonesia.</p>
-        </div>
-    </footer>
-</body>
-</html>
+{% endblock content %}

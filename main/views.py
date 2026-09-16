@@ -36,19 +36,19 @@ def show_experience(request):
     return render(request, "experience.html", context)
 
 def show_project(request):
-    try:
-        project_list = list(Project.objects.all())
-    except (OperationalError, ProgrammingError):
-        from django.core.management import call_command
-        try:
-            call_command('migrate', interactive=False)
-            project_list = list(Project.objects.all())
-        except Exception:
-            project_list = []
-            
+    json_response = get_projects_json(request)
+
+    projects = serializers.deserialize(
+        "json",
+        json_response.content.decode("utf-8"),
+    )
+    projects = [project.object for project in projects]
+    title_query = request.GET.get("title", "").strip()
+
     context = {
         "name": "Amelinda Fedora Faragusti",
-        "project_list": project_list,
+        "project_list": projects,
+        "title_query": title_query,
     }
     return render(request, "project.html", context)
 
@@ -65,3 +65,23 @@ def create_project(request):
         "form": form,
     }
     return render(request, "projects_form.html", context)
+
+def get_projects_json(request):
+    title_query = request.GET.get("title", "").strip()
+    projects = Project.objects.all()
+
+    if title_query:
+        projects = projects.filter(title__icontains=title_query)
+
+    projects_json = serializers.serialize("json", projects)
+    return HttpResponse(projects_json, content_type="application/json")
+
+def delete_project(request, project_id):
+    project = get_object_or_404(Project, pk=project_id)
+
+    if request.method == "POST":
+        project.delete()
+        messages.success(request, "Project berhasil dihapus!")
+        return redirect("main:show_project")
+
+    return redirect("main:show_project")
