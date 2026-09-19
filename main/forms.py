@@ -38,7 +38,7 @@ class ProjectForm(ModelForm):
             ),
             "category": TextInput(
                 attrs={
-                    "placeholder": "Web Development",
+                    "placeholder": "web-dev",
                 }
             ),
             "tech_stack": TextInput(
