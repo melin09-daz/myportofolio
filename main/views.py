@@ -5,7 +5,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.shortcuts import render
 from django.db.utils import OperationalError, ProgrammingError
 from main.models import Experience, Project
-from main.forms import ProjectForm
+from main.forms import ExperienceForm, ProjectForm
 
 def show_main(request):
     context = {
@@ -20,20 +20,49 @@ def show_main(request):
 
 def show_experience(request):
     try:
-        experience_list = list(Experience.objects.all())
+        experience_list = Experience.objects.all()
     except (OperationalError, ProgrammingError):
         from django.core.management import call_command
         try:
             call_command('migrate', interactive=False)
-            experience_list = list(Experience.objects.all())
+            experience_list = Experience.objects.all()
         except Exception:
             experience_list = []
-            
+
+    title_query = request.GET.get("title", "").strip()
+    if title_query and experience_list:
+        experience_list = experience_list.filter(title__icontains=title_query)
+
     context = {
         "name": "Amelinda Fedora Faragusti",
         "experience_list": experience_list,
+        "title_query": title_query,
     }
     return render(request, "experience.html", context)
+
+def create_experience(request):
+    form = ExperienceForm(request.POST or None)
+
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        messages.success(request, "Pengalaman baru berhasil ditambahkan!")
+        return redirect("main:show_experience")
+
+    context = {
+        "name": "Amelinda Fedora Faragusti",
+        "form": form,
+    }
+    return render(request, "experiences_form.html", context)
+
+def delete_experience(request, experience_id):
+    experience = get_object_or_404(Experience, pk=experience_id)
+
+    if request.method == "POST":
+        experience.delete()
+        messages.success(request, "Pengalaman berhasil dihapus!")
+        return redirect("main:show_experience")
+
+    return redirect("main:show_experience")
 
 def show_project(request):
     json_response = get_projects_json(request)
