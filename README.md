@@ -14,6 +14,10 @@ Week 1: Setup awal Django beserta template portofolio.
 
 Week 2: Menambahkan section baru yaitu skill serta tampilan yang sedikit diubah.
 
+Week 3: Implementasi MVT di Experience dan Project
+
+Week 4: Form & Data Delivery di Experience dan Project
+
 ### Tugas 1 
 
 1. Iya, saya menggunakan elemen semantik HTML5 salah satunya adalah &lt;section> yang dimana dapat membantu saya untuk membagi bagian-bagian fungsional halaman (seperti bagian Hero/Profil) dan pengguna dapat lebih mudah untuk navigasi ke bagian yang mereka inginkan.
@@ -77,3 +81,21 @@ Ketika kita membuat class model Project baru dari awal:
 - makemigrations: Mencatat operasi CreateModel(name='Project', fields=...) ke berkas 0004_project.py.
 - migrate: Menjalankan SQL CREATE TABLE main_project (...) di dalam database. 
 Tanpa perintah ini, akan terjadi error ketika view mencoba mengambil data dari model Project.
+
+### Tugas 3
+
+1. Mengapa menggunakan ModelForm pada Django alih-alih membuat form HTML secara manual? Untuk menghemat waktu karena field form HTML dan tipe datanya dibuat otomatis mengikuti definisi pada Model. Pada fungsi form.is_valid() otomatis mengecek format data serta mencegah data berbahaya masuk ke database. Penyimpanan database juga lebhi praktis dengan memanggil form.save() untuk menyimpan data ke database tanpa perlu membuat satu per satu secara manual. 
+
+Mengapa diwajibkan menambahkan {% csrf_token %} pada form tersebut? Tag {% csrf_token %} wajib digunakan pada metode ubah data yang sudah dibuat untuk mencegah serangan CSRF(Cross-Site Request Forgery). Django otomatis memblokir dengan pesan 403 Forbidden, sehingga database tetap aman.
+
+2. Saat ini, JSON lebih disukai dibandingkan XML pada aplikasi modern (terutama pada arsitektur RESTful API) karena ukurannya yang lebih ringkas, parser yang sangat cepat, dan integrasi yang sangat natural dengan JavaScript di sisi frontend.
+
+3. Alur yang terjadi saat menggunakan fungsi view untuk mengembalikan data portofolio dalam bentuk JSON:
+- HTTP Request: mengirimkan request HTTP GET ke URL (contoh: /api/projects/).
+- Routing URL (urls.py): Django mencocokan URL dan meneruskan permintaan ke fungsi view terkait.
+- Pengambilan data dari database (querying): Hasil operasi ini menghasilkan sekumpulan objek Python berupa QuerySet.
+- Serialisasi data: QuerySet diubah dari objek Python ke bentuk string berformat JSON.
+- HTTP Response: Data JSON dikemas dengan menggunakan return HttpResponse(serialized_data, content_type="application/json").
+- Django mengirimkan respon HTTP tersebut kembali ke user. Browser menerima dan langsung parsing sehingga dapat langsung ditampilkan di layar.
+
+Mengapa perlu melakukan proses serialization pada model Django sebelum datanya dikembalikan? HTTP hanya mengirimkan teks dasar. Objek Model/QuerySet Django terlalu kompleks dan menganduk tipe data yang tidak bisa dibaca langsung oleh JSON tanpa diubah ke tipe data standar. Jadi, serialization bertugas menerjemahkan tipe data kompleks tersebut ke dalam tipe data yang valid di JSON (seperti string, number, boolean, atau array).
