@@ -13,11 +13,18 @@
     <header class="site-header" id="site-header">
         <div class="container">
             <a href="{% url 'main:show_main' %}" class="brand">{{ name }}</a>
-            <nav id="main-nav" aria-label="Main Navigation">
+            <nav>
                 <a href="{% url 'main:show_main' %}">Profile</a>
                 <a href="#skills" id="nav-skills-link">Skills</a>
                 <a href="{% url 'main:show_experience' %}">Experience</a>
                 <a href="{% url 'main:show_project' %}">Projects</a>
+                {% if user.is_authenticated %}
+                    <span class="nav-user">{{ user.username }}</span>
+                    <a href="{% url 'main:logout' %}">Logout</a>
+                {% else %}
+                    <a href="{% url 'main:login' %}">Login</a>
+                    <a href="{% url 'main:register' %}">Register</a>
+                {% endif %}
             </nav>
         </div>
     </header>
@@ -36,16 +43,20 @@
                 <div class="hero-details" id="hero-details-block">
                     <p class="bio">{{ bio }}</p>
                     <div class="hero-meta-wrapper" id="hero-meta-wrapper">
-                        <div class="meta-cards-group" id="meta-cards-group">
+                        <dl class="meta-cards-group" id="meta-cards-group">
                             <div class="meta-card" id="meta-npm-card">
-                                <span class="meta-card-label">NPM</span>
+                                <dt class="meta-card-label">NPM</dt>
                                 <dd>{{ npm }}</dd>
                             </div>
                             <div class="meta-card" id="meta-program-card">
-                                <span class="meta-card-label">Program</span>
+                                <dt class="meta-card-label">Program</dt>
                                 <dd>{{ study_program }}</dd>
                             </div>
-                        </div>
+                            <div class="meta-card" id="meta-last-login-card">
+                                <dt class="meta-card-label">Sesi Terakhir Login</dt>
+                                <dd>{{ last_login }}</dd>
+                            </div>
+                        </dl>
                         <div class="hero-actions" id="hero-actions-group">
                             <a href="https://docs.google.com/uc?export=download&id=1QQvtKZsmkfewHHmD1apZSxidx90dd4qJ" class="btn-download-cv" id="btn-download-cv">
                                 <svg class="download-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">

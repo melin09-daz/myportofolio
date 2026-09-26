@@ -1,4 +1,5 @@
 import uuid
+from django.contrib.auth.models import User
 from django.db import models
 
 class Experience(models.Model):
@@ -81,6 +82,9 @@ class Project(models.Model):
     tech_stack = models.CharField(max_length=255, blank=True, help_text="Contoh: Django, Python, PostgreSQL, Tailwind")
     repository_url = models.URLField(blank=True, null=True, help_text="Link ke GitHub/GitLab repository")
     demo_url = models.URLField(blank=True, null=True, help_text="Link ke live demo aplikasi")
+    starred_by = models.ManyToManyField(
+        User, related_name="starred_projects", blank=True
+    )
 
     def __str__(self):
         return self.title
