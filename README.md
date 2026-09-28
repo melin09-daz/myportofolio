@@ -18,6 +18,8 @@ Week 3: Implementasi MVT di Experience dan Project
 
 Week 4: Form & Data Delivery di Experience dan Project
 
+Week 5: Authentication, Session and Cookies Implementation
+
 ### Tugas 1 
 
 1. Iya, saya menggunakan elemen semantik HTML5 salah satunya adalah &lt;section> yang dimana dapat membantu saya untuk membagi bagian-bagian fungsional halaman (seperti bagian Hero/Profil) dan pengguna dapat lebih mudah untuk navigasi ke bagian yang mereka inginkan.
