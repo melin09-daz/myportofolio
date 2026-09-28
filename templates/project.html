@@ -47,28 +47,29 @@
                                 </div>
                             {% endif %}
 
-                            {% if project.repository_url or project.demo_url %}
-                                <div class="project-card-actions">
-                                    <div class="project-actions">
-                                        {% if project.repository_url %}
-                                            <a href="{{ project.repository_url }}" class="button" target="_blank" rel="noopener noreferrer">Repository</a>
-                                        {% endif %}
-                                        {% if project.demo_url %}
-                                            <a href="{{ project.demo_url }}" class="button" target="_blank" rel="noopener noreferrer">Live Demo</a>
-                                        {% endif %}
-                                        {% include "components/project_star.html" with project=project %}
-                                        {% if user.is_superuser %}
-                                            {% include "components/project_delete_modal.html" with project=project %}
-                                        {% endif %}
-                                    </div>
+                            <div class="project-card-actions">
+                                <div class="project-actions">
+                                    {% if project.repository_url %}
+                                        <a href="{{ project.repository_url }}" class="button" target="_blank" rel="noopener noreferrer">Repository</a>
+                                    {% endif %}
+                                    {% if project.demo_url %}
+                                        <a href="{{ project.demo_url }}" class="button" target="_blank" rel="noopener noreferrer">Live Demo</a>
+                                    {% endif %}
+                                    {% include "components/project_star.html" with project=project %}
+                                    {% if user.is_superuser or is_editor %}
+                                        <a href="{% url 'main:edit_project' project.id %}" class="button">Edit</a>
+                                    {% endif %}
+                                    {% if user.is_superuser %}
+                                        {% include "components/project_delete_modal.html" with project=project %}
+                                    {% endif %}
                                 </div>
-                            {% endif %}
+                            </div>
                         </article>
                     {% empty %}
                         {% if title_query %}
                             <p class="empty-state">Tidak ada proyek dengan nama tersebut.</p>
                         {% else %}
-                            <p class="empty-state">Belum ada proyek yang ditambahkan.</p>
+                            <p class="empty-state">Belum ada project yang ditambahkan.</p>
                         {% endif %}
                     {% endfor %}
                 </div>
