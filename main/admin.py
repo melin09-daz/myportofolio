@@ -6,7 +6,7 @@ from .models import Experience, Project
 class ExperienceAdmin(admin.ModelAdmin):
     list_display = ('title', 'category', 'started_at', 'ended_at')
     list_filter = ('category',)
-    search_fields = ('title', 'organization', 'description')
+    search_fields = ('title', 'description')
     
 @admin.register(Project)
 class ProjectAdmin(admin.ModelAdmin):
