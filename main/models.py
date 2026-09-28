@@ -25,6 +25,9 @@ class Experience(models.Model):
     start_month = models.PositiveSmallIntegerField(blank=True, null=True, help_text="Bulan awal (1-12)") # Bulan awal
     end_month = models.PositiveSmallIntegerField(blank=True, null=True, help_text="Bulan akhir (1-12)") # Bulan akhir
     is_ongoing = models.BooleanField(default=True) # Condition
+    starred_by = models.ManyToManyField(
+        User, related_name="starred_experiences", blank=True
+    )
     
     MONTH_NAMES = {
         1: 'Januari', 2: 'Februari', 3: 'Maret', 4: 'April',
