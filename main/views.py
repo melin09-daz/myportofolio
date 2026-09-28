@@ -26,23 +26,18 @@ def show_main(request):
     return render(request, "index.html", context)
 
 def show_experience(request):
-    try:
-        experience_list = Experience.objects.all()
-    except (OperationalError, ProgrammingError):
-        from django.core.management import call_command
-        try:
-            call_command('migrate', interactive=False)
-            experience_list = Experience.objects.all()
-        except Exception:
-            experience_list = []
-
+    json_response = get_experience_json(request)
+    
+    experiences = serializers.deserialize(
+        "json",
+        json_response.content.decode("utf-8"),
+    )
+    experiences = [experience.object for experience in experiences]
     title_query = request.GET.get("title", "").strip()
-    if title_query and experience_list:
-        experience_list = experience_list.filter(title__icontains=title_query)
-
+    
     context = {
         "name": "Amelinda Fedora Faragusti",
-        "experience_list": experience_list,
+        "experience_list": experiences,
         "title_query": title_query,
     }
     return render(request, "experience.html", context)
@@ -60,6 +55,16 @@ def create_experience(request):
         "form": form,
     }
     return render(request, "experiences_form.html", context)
+
+def get_experience_json(request):
+    title_query = request.GET.get("title", "").strip()
+    experiences = Experience.objects.all()
+
+    if title_query:
+        experiences = experiences.filter(title__icontains=title_query)
+
+    experiences_json = serializers.serialize("json", experiences, use_natural_foreign_keys=True)
+    return HttpResponse(experiences_json, content_type="application/json")
 
 def delete_experience(request, experience_id):
     experience = get_object_or_404(Experience, pk=experience_id)
