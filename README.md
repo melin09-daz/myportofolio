@@ -84,6 +84,8 @@ Ketika kita membuat class model Project baru dari awal:
 - migrate: Menjalankan SQL CREATE TABLE main_project (...) di dalam database. 
 Tanpa perintah ini, akan terjadi error ketika view mencoba mengambil data dari model Project.
 
+Dalam mengerjakan proyek ini, saya sama sekali tidak menggunakan bantuan AI. Kebanyakan saya melihat tutorial dari youtube dengan banyaknya variasi yang ada untuk ide ide isi dalam portofolio. Jika masih ada code yang dibingungkan dapat melihat source yang ada di google.
+
 ### Tugas 3
 
 1. Mengapa menggunakan ModelForm pada Django alih-alih membuat form HTML secara manual? Untuk menghemat waktu karena field form HTML dan tipe datanya dibuat otomatis mengikuti definisi pada Model. Pada fungsi form.is_valid() otomatis mengecek format data serta mencegah data berbahaya masuk ke database. Penyimpanan database juga lebhi praktis dengan memanggil form.save() untuk menyimpan data ke database tanpa perlu membuat satu per satu secara manual. 
@@ -101,3 +103,5 @@ Mengapa diwajibkan menambahkan {% csrf_token %} pada form tersebut? Tag {% csrf_
 - Django mengirimkan respon HTTP tersebut kembali ke user. Browser menerima dan langsung parsing sehingga dapat langsung ditampilkan di layar.
 
 Mengapa perlu melakukan proses serialization pada model Django sebelum datanya dikembalikan? HTTP hanya mengirimkan teks dasar. Objek Model/QuerySet Django terlalu kompleks dan menganduk tipe data yang tidak bisa dibaca langsung oleh JSON tanpa diubah ke tipe data standar. Jadi, serialization bertugas menerjemahkan tipe data kompleks tersebut ke dalam tipe data yang valid di JSON (seperti string, number, boolean, atau array).
+
+Dalam mengerjakan proyek ini, saya sama sekali tidak menggunakan bantuan AI. Kebanyakan saya melihat tutorial dari youtube dengan banyaknya variasi yang ada untuk ide ide isi dalam portofolio. Jika masih ada code yang dibingungkan dapat melihat source yang ada di google.
