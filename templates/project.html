@@ -104,8 +104,12 @@
             ? `<img src="${escapeHtml(project.project_image_url)}" alt="Gambar ${escapeHtml(project.title)}" class="project-image">`
             : '';
 
-        const urlHtml = project.project_url
-            ? `<a href="${escapeHtml(project.project_url)}" class="button">Lihat Project</a>`
+        const demoHtml = project.demo_url
+            ? `<a href="${escapeHtml(project.demo_url)}" target="_blank" rel="noopener noreferrer" class="button">Live Demo</a>`
+            : (project.project_url ? `<a href="${escapeHtml(project.project_url)}" target="_blank" rel="noopener noreferrer" class="button">Lihat Project</a>` : '');
+
+        const repoHtml = project.repository_url
+            ? `<a href="${escapeHtml(project.repository_url)}" target="_blank" rel="noopener noreferrer" class="button button-secondary">Repository</a>`
             : '';
 
         // Dummy UUID digunakan untuk digantikan oleh ID asli dari data JSON
@@ -135,7 +139,8 @@
             <p class="experience-description">${escapeHtml(project.description)}</p>
             <div class="project-card-actions">
                 <div class="project-actions">
-                    ${urlHtml}
+                    ${demoHtml}
+                    ${repoHtml}
                     
                     <form method="post" action="${starUrl}" class="star-form">
                         {% csrf_token %}

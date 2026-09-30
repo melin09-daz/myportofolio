@@ -239,9 +239,10 @@ def get_projects_json(request):
             "fields": {
                 "title": project.title,
                 "description": project.description,
+                "category": project.category,
                 "tech_stack": project.tech_stack,
-                "project_url": project.project_url,
-                "project_image_url": project.project_image_url,
+                "repository_url": project.repository_url,
+                "demo_url": project.demo_url,
                 "star_count": starred_users.count(),
                 "is_starred": is_starred,
                 "starred_by_names": starred_by_names,
