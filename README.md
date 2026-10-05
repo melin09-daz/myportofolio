@@ -105,3 +105,16 @@ Mengapa diwajibkan menambahkan {% csrf_token %} pada form tersebut? Tag {% csrf_
 Mengapa perlu melakukan proses serialization pada model Django sebelum datanya dikembalikan? HTTP hanya mengirimkan teks dasar. Objek Model/QuerySet Django terlalu kompleks dan menganduk tipe data yang tidak bisa dibaca langsung oleh JSON tanpa diubah ke tipe data standar. Jadi, serialization bertugas menerjemahkan tipe data kompleks tersebut ke dalam tipe data yang valid di JSON (seperti string, number, boolean, atau array).
 
 Dalam mengerjakan proyek ini, saya sama sekali tidak menggunakan bantuan AI. Kebanyakan saya melihat tutorial dari youtube dengan banyaknya variasi yang ada untuk ide ide isi dalam portofolio. Jika masih ada code yang dibingungkan dapat melihat source yang ada di google.
+
+### Tugas 5
+
+1. Debouncing adalah teknik untuk menunda sebuah fungsi hingga suatu jeda waktu berlalu tanpa event baru. Selama pengguna masih mengetik, timer sebelumnya dibatalkan dan dimulai lagi. Dengan demikian, browser hanya mengirim permintaan setelah pengguna berhenti mengetik selama sejenak.
+
+Debouncing sangat penting pada pencarian menggunakan AJAX:
+- Mengurangi beban kerja server (server load)
+- Menghemat bandwidth dan konsumsi data jaringan
+- Meningkatkan responsivitas UI/UX.
+
+2. Fungsi dari penggunaan await saat menggunakkan fetch(): menunda (pause) eksekusi baris kode berikutnya dan membuka bungkus (unwrap) objek Promise, sehingga variabel yang dideklarasikan langsung menerima objek asli berupa Response (yang berisi properti seperti response.ok, response.status, serta method response.json()).
+
+Apa yang terjadi jika tidak menggunakan await: Variabel penampung tidak akan berisi data respons dari server, melainkan objek janji (Promise) yang statusnya masih berjalan di latar belakang dan JavaScript akan langsung mengeksekusi baris kode. Akibatnya, fungsi yang bertugas menampilkan data ke layar (render DOM) akan memproses data kosong (undefined), sehingga UI gagal memuat konten atau form tidak memberikan umpan balik yang semestinya.

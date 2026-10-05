@@ -62,6 +62,10 @@
     // Konfigurasi
     const BASE_PROJECTS_ENDPOINT = "{% url 'main:get_projects_json' %}";
     const IS_SUPERUSER = "{{ user.is_superuser|yesno:'true,false' }}" === "true";
+    const CAN_EDIT = ("{{ user.is_superuser|yesno:'true,false' }}" === "true")
+        || ("{{ is_editor|yesno:'true,false' }}" === "true")
+        || ("{{ can_edit|yesno:'true,false' }}" === "true")
+        || ("{{ perms.main.change_project|yesno:'true,false' }}" === "true");
     let projectsAbortController;
 
     // Elemen DOM
@@ -127,7 +131,7 @@
             </form>`
             : '';
 
-        const editHtml = IS_SUPERUSER
+        const editHtml = CAN_EDIT
             ? `<a href="${editUrl}" class="button button-secondary">Edit</a>`
             : '';
 

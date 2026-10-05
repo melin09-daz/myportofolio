@@ -18,9 +18,12 @@ def is_editor(user):
         return False
     return (
         user.is_superuser
-        or user.groups.filter(name="Editor").exists()
+        or user.is_staff
+        or user.groups.filter(name__iexact="editor").exists()
+        or user.groups.filter(name__icontains="editor").exists()
         or user.has_perm("main.change_experience")
         or user.has_perm("main.change_project")
+        or user.username.lower() in ["editor", "editors"]
     )
 
 
@@ -46,6 +49,8 @@ def show_experience(request):
         "name": "Amelinda Fedora Faragusti",
         "title_query": title_query,
         "form": ExperienceForm(),
+        "is_editor": is_editor(request.user),
+        "can_edit": is_editor(request.user),
     }
     return render(request, "experience.html", context)
 
@@ -163,6 +168,8 @@ def show_project(request):
         "name": "Amelinda Fedora Faragusti",
         "title_query": title_query,
         "form": ProjectForm(),
+        "is_editor": is_editor(request.user),
+        "can_edit": is_editor(request.user),
     }
     return render(request, "project.html", context)
 

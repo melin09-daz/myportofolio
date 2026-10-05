@@ -62,6 +62,10 @@
     // Konfigurasi
     const BASE_EXPERIENCES_ENDPOINT = "{% url 'main:get_experience_json' %}";
     const IS_SUPERUSER = "{{ user.is_superuser|yesno:'true,false' }}" === "true";
+    const CAN_EDIT = ("{{ user.is_superuser|yesno:'true,false' }}" === "true")
+        || ("{{ is_editor|yesno:'true,false' }}" === "true")
+        || ("{{ can_edit|yesno:'true,false' }}" === "true")
+        || ("{{ perms.main.change_experience|yesno:'true,false' }}" === "true");
     let experiencesAbortController;
 
     // Elemen DOM
@@ -157,7 +161,7 @@
             </form>`
             : '';
 
-        const editHtml = IS_SUPERUSER
+        const editHtml = CAN_EDIT
             ? `<a href="${editUrl}" class="button button-secondary">Edit</a>`
             : '';
 
