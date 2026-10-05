@@ -115,6 +115,8 @@
         // Dummy UUID digunakan untuk digantikan oleh ID asli dari data JSON
         const deleteUrl = "{% url 'main:delete_project' '00000000-0000-0000-0000-000000000000' %}"
             .replace('00000000-0000-0000-0000-000000000000', projectId);
+        const editUrl = "{% url 'main:edit_project' '00000000-0000-0000-0000-000000000000' %}"
+            .replace('00000000-0000-0000-0000-000000000000', projectId);
         const starUrl = "{% url 'main:toggle_star' '00000000-0000-0000-0000-000000000000' %}"
             .replace('00000000-0000-0000-0000-000000000000', projectId);
 
@@ -123,6 +125,10 @@
                 {% csrf_token %}
                 <button type="submit" class="button button-danger" onclick="return confirm('Yakin ingin menghapus project ini?');">Hapus</button>
             </form>`
+            : '';
+
+        const editHtml = IS_SUPERUSER
+            ? `<a href="${editUrl}" class="button button-secondary">Edit</a>`
             : '';
 
         const isStarredClass = project.is_starred ? " is-starred" : "";
@@ -153,6 +159,7 @@
                         </button>
                     </form>
 
+                    ${editHtml}
                     ${deleteHtml}
                 </div>
             </div>
