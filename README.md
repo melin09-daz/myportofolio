@@ -118,3 +118,12 @@ Debouncing sangat penting pada pencarian menggunakan AJAX:
 2. Fungsi dari penggunaan await saat menggunakkan fetch(): menunda (pause) eksekusi baris kode berikutnya dan membuka bungkus (unwrap) objek Promise, sehingga variabel yang dideklarasikan langsung menerima objek asli berupa Response (yang berisi properti seperti response.ok, response.status, serta method response.json()).
 
 Apa yang terjadi jika tidak menggunakan await: Variabel penampung tidak akan berisi data respons dari server, melainkan objek janji (Promise) yang statusnya masih berjalan di latar belakang dan JavaScript akan langsung mengeksekusi baris kode. Akibatnya, fungsi yang bertugas menampilkan data ke layar (render DOM) akan memproses data kosong (undefined), sehingga UI gagal memuat konten atau form tidak memberikan umpan balik yang semestinya.
+
+3. Cross-Site Scripting (XSS) adalah serangan ketika penyerang berhasil menyisipkan kode JavaScript miliknya ke dalam halaman web yang kemudian dijalankan di browser pengguna lain. Salah satu jenisnya adalah stored XSS, yaitu ketika kode berbahaya disimpan ke database (misalnya sebagai judul proyek) lalu ikut dijalankan setiap kali data tersebut ditampilkan.
+
+data yang ditampilkan melalui AJAX/JavaScript lebih rentan terhadap serangan ini daripada data yang ditampilkan langsung melalui template Django: 
+- Auto-Escaping: Django secara otomatis mengonversi karakter berbahaya (<, >, ", ', &) menjadi entitas HTML sebelum dirender di browser.
+
+- Hasil: Input jahat seperti <script> hanya akan tampil sebagai teks biasa dan tidak akan dieksekusi.
+
+Dalam mengerjakan proyek ini, saya sama sekali tidak menggunakan bantuan AI. Kebanyakan saya melihat tutorial dari youtube dengan banyaknya variasi yang ada untuk ide ide isi dalam portofolio. Jika masih ada code yang dibingungkan dapat melihat source yang ada di google.
