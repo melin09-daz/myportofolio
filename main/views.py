@@ -144,6 +144,8 @@ def get_experience_json(request):
                 "start_year": experience.start_year,
                 "end_month": experience.end_month,
                 "end_year": experience.end_year,
+                "is_ongoing": experience.is_ongoing,
+                "period_display": experience.period_display,
                 "logo": experience.logo,
                 "star_count": starred_users.count(),
                 "is_starred": is_starred,
