@@ -8,20 +8,22 @@
             <div class="container">
                 <p class="section-kicker">Perjalanan saya sejauh ini</p>
                 <div class="project-header">
+                    <button class="button button-secondary" onclick="showToast('Notifikasi Sistem', 'Experience berhasil dimuat dengan baik!', 'success')">
+                        Test Toast Notifikasi
+                    </button>
                     <h1>Experience</h1>
                     {% if user.is_superuser %}
                         <a href="{% url 'main:create_experience' %}"
-                        class="button project-add-button">
+                           class="button project-add-button">
                             <span aria-hidden="true">+</span>
                             Tambah Pengalaman
                         </a>
                     {% endif %} 
                 </div>
 
-                <form method="get"
-                      action="{% url 'main:show_experience' %}"
-                      class="project-search">
+                <form id="experience-search-form" class="project-search">
                     <input type="search"
+                           id="search-input"
                            name="title"
                            value="{{ title_query }}"
                            placeholder="Cari berdasarkan nama pengalaman"
@@ -30,46 +32,23 @@
                     <button type="submit" class="button">Cari</button>
                 </form>
 
-                <div class="experience-grid">
-                    {% for experience in experience_list %}
-                        <article class="experience-card">
-                            <div class="experience-card-header">
-                                <span class="experience-category">
-                                    {{ experience.get_category_display }}
-                                </span>
-                                {% if experience.logo %}
-                                    <img src="{{ experience.logo }}" alt="Logo" class="experience-logo" width="50" height="50">
-                                {% endif %}
-                            </div>
-                            <h2>{{ experience.title }}</h2>
-                            <p class="experience-description">
-                                {{ experience.description }}
-                            </p>
-
-                            <p class="experience-status {% if experience.is_ongoing %}status-ongoing{% else %}status-completed{% endif %}">
-                                {{ experience.period_display }}
-                            </p>
-
-                            <div class="project-card-actions">
-                                <div class="project-actions">
-                                    {% include "components/experience_star.html" with experience=experience %}
-                                    {% if user.is_superuser or is_editor %}
-                                        <a href="{% url 'main:edit_experience' experience.id %}" class="button">Edit</a>
-                                    {% endif %}
-                                    {% if user.is_superuser %} 
-                                        {% include "components/experience_delete_modal.html" with experience=experience %}
-                                    {% endif %}  
-                                </div>
-                            </div>
-                        </article>
-                    {% empty %}
-                        {% if title_query %}
-                            <p class="empty-state">Tidak ada pengalaman dengan nama tersebut.</p>
-                        {% else %}
-                            <p class="empty-state">Belum ada pengalaman yang ditambahkan.</p>
-                        {% endif %}
-                    {% endfor %}
+                <!-- Loading State -->
+                <div id="loading" class="empty-state hide">
+                    <p>Memuat experiences...</p>
                 </div>
+
+                <!-- Error State -->
+                <div id="error" class="empty-state hide">
+                    <p>Gagal memuat data experiences. Silakan coba lagi.</p>
+                </div>
+
+                <!-- Empty State -->
+                <div id="empty" class="empty-state hide">
+                    <p>Belum ada pengalaman yang ditambahkan atau ditemukan.</p>
+                </div>
+
+                <!-- Experience Grid -->
+                <div id="grid" class="experience-grid project-grid hide"></div>
             </div>
         </section>
     </main>
