@@ -206,7 +206,7 @@
 
     function apiErrorMessage(data, status) {
         const messages = Object.values(data).flat().filter(value => typeof value === 'string');
-        return messages.join(' ') || `Terjadi kesalahan (HTTP ${status}).`;
+        return messages.join(' ') || `Request failed (HTTP ${status}).`;
     }
 
     async function writeExperience(url, method, payload) {
@@ -243,10 +243,10 @@
             await writeExperience(BASE_EXPERIENCES_ENDPOINT, 'POST', payload);
             experienceForm.reset();
             closeExperienceModal();
-            showToast('Berhasil', 'Pengalaman baru berhasil ditambahkan!', 'success');
+            showToast('Success', 'Experience created.', 'success');
             await fetchExperiences(searchInput.value.trim());
         } catch (error) {
-            showToast('Gagal menambahkan pengalaman', error.message, 'error');
+            showToast('Could not create experience', error.message, 'error');
         } finally {
             submitButton.disabled = false;
         }
@@ -259,17 +259,17 @@
         if (!button || button.disabled) return;
 
         const action = button.dataset.action;
-        if (action === 'delete' && !window.confirm('Yakin ingin menghapus pengalaman ini?')) return;
+        if (action === 'delete' && !window.confirm('Delete this experience?')) return;
 
         button.disabled = true;
         try {
             const pattern = action === 'star' ? STAR_EXPERIENCE_ENDPOINT : DETAIL_EXPERIENCE_ENDPOINT;
             await writeExperience(experienceEndpoint(pattern, button.dataset.id),
                                   action === 'star' ? 'POST' : 'DELETE');
-            showToast('Berhasil', action === 'star' ? 'Star diperbarui.' : 'Pengalaman dihapus.', 'success');
+            showToast('Success', action === 'star' ? 'Star updated.' : 'Experience deleted.', 'success');
             await fetchExperiences(searchInput.value.trim());
         } catch (error) {
-            showToast('Permintaan gagal', error.message, 'error');
+            showToast('Request failed', error.message, 'error');
         } finally {
             button.disabled = false;
         }
