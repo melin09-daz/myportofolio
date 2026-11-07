@@ -16,15 +16,7 @@ from main.models import Experience, Project
 def is_editor(user):
     if not user.is_authenticated:
         return False
-    return (
-        user.is_superuser
-        or user.is_staff
-        or user.groups.filter(name__iexact="editor").exists()
-        or user.groups.filter(name__icontains="editor").exists()
-        or user.has_perm("main.change_experience")
-        or user.has_perm("main.change_project")
-        or user.username.lower() in ["editor", "editors"]
-    )
+    return user.is_superuser or user.groups.filter(name="Editor").exists()
 
 
 def show_main(request):
@@ -49,6 +41,7 @@ def show_experience(request):
         "name": "Amelinda Fedora Faragusti",
         "title_query": title_query,
         "form": ExperienceForm(),
+        "edit_form": ExperienceForm(auto_id="edit_%s"),
         "is_editor": is_editor(request.user),
         "can_edit": is_editor(request.user),
     }

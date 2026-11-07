@@ -219,3 +219,89 @@ class ExperienceAPITest(APITestCase):
         response = self.client.post(self.star_url)
         self.assertFalse(response.data["is_starred"])
         self.assertEqual(response.data["star_count"], 0)
+
+    def test_denied_writes_do_not_change_database(self):
+        for user in (None, self.visitor):
+            self.client.force_authenticate(user=user)
+            self.client.patch(self.detail_url, {"title": "Diretas"}, format="json")
+            self.client.delete(self.detail_url)
+            self.client.post(self.list_url, self.payload, format="json")
+        self.experience.refresh_from_db()
+        self.assertEqual(self.experience.title, "Asisten Dosen")
+        self.assertEqual(Experience.objects.count(), 1)
+
+    def test_editor_patch_and_put_change_database(self):
+        self.client.force_authenticate(user=self.editor)
+        self.client.patch(self.detail_url, {"title": "Diubah Editor"}, format="json")
+        self.experience.refresh_from_db()
+        self.assertEqual(self.experience.title, "Diubah Editor")
+        self.assertEqual(self.experience.description, "Membantu mahasiswa")
+        response = self.client.put(self.detail_url, self.payload, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.experience.refresh_from_db()
+        self.assertEqual(self.experience.title, "Research Intern")
+
+    def test_staff_without_editor_group_cannot_update(self):
+        self.visitor.is_staff = True
+        self.visitor.save()
+        self.client.force_authenticate(user=self.visitor)
+        response = self.client.patch(self.detail_url, {"title": "Diretas"}, format="json")
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_missing_experience(self):
+        url = reverse("api:experience-detail", args=[uuid.uuid4()])
+        self.assertEqual(self.client.get(url).status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_session_write_without_csrf_is_rejected(self):
+        client = APIClient(enforce_csrf_checks=True)
+        self.assertTrue(client.login(username="owner", password="test-password"))
+        response = client.post(self.list_url, self.payload, format="json")
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(Experience.objects.count(), 1)
+
+    def test_session_write_with_csrf_succeeds(self):
+        client = APIClient(enforce_csrf_checks=True)
+        client.login(username="owner", password="test-password")
+        client.get(self.list_url, HTTP_ACCEPT="text/html")
+        token = client.cookies["csrftoken"].value
+        response = client.post(
+            self.list_url, self.payload, format="json", HTTP_X_CSRFTOKEN=token,
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+
+class ExperienceLegacyViewConsistencyTest(APITestCase):
+
+    def setUp(self):
+        self.owner = User.objects.create_superuser("owner", "o@example.com", "test-password")
+        self.visitor = User.objects.create_user("visitor", password="test-password")
+        self.staff = User.objects.create_user("staff", password="test-password", is_staff=True)
+        self.lookalike = User.objects.create_user("editor", password="test-password")
+        self.editor = User.objects.create_user("realeditor", password="test-password")
+        self.editor.groups.add(Group.objects.create(name="Editor"))
+        self.experience = Experience.objects.create(
+            title="Asisten Dosen", description="Membantu", category="part-time",
+        )
+        self.edit_url = reverse("main:edit_experience", args=[self.experience.id])
+        self.page_url = reverse("main:show_experience")
+
+    def test_only_owner_and_editor_group_open_legacy_edit_page(self):
+        for user, expected in [
+            (self.visitor, 403), (self.staff, 403), (self.lookalike, 403),
+            (self.editor, 200), (self.owner, 200),
+        ]:
+            self.client.force_login(user)
+            self.assertEqual(self.client.get(self.edit_url).status_code, expected, user.username)
+
+    def test_legacy_delete_is_owner_only(self):
+        self.client.force_login(self.editor)
+        url = reverse("main:delete_experience", args=[self.experience.id])
+        self.assertEqual(self.client.post(url).status_code, 403)
+        self.assertTrue(Experience.objects.filter(pk=self.experience.id).exists())
+
+    def test_edit_modal_only_rendered_for_owner_and_editor(self):
+        for user, expected in [(self.visitor, False), (self.staff, False),
+                               (self.editor, True), (self.owner, True)]:
+            self.client.force_login(user)
+            response = self.client.get(self.page_url)
+            self.assertEqual('id="experience-edit-form"' in response.content.decode(), expected, user.username)
