@@ -20,6 +20,10 @@ Week 4: Form & Data Delivery di Experience dan Project
 
 Week 5: Authentication, Session and Cookies Implementation
 
+Week 6: Web Interactivity with JavaScript
+
+Week 7: Django REST Framework Implementation
+
 ### Tugas 1 
 
 1. Iya, saya menggunakan elemen semantik HTML5 salah satunya adalah &lt;section> yang dimana dapat membantu saya untuk membagi bagian-bagian fungsional halaman (seperti bagian Hero/Profil) dan pengguna dapat lebih mudah untuk navigasi ke bagian yang mereka inginkan.
@@ -127,3 +131,27 @@ data yang ditampilkan melalui AJAX/JavaScript lebih rentan terhadap serangan ini
 - Hasil: Input jahat seperti <script> hanya akan tampil sebagai teks biasa dan tidak akan dieksekusi.
 
 Dalam mengerjakan proyek ini, saya sama sekali tidak menggunakan bantuan AI. Kebanyakan saya melihat tutorial dari youtube dengan banyaknya variasi yang ada untuk ide ide isi dalam portofolio. Jika masih ada code yang dibingungkan dapat melihat source yang ada di google.
+
+### Tugas 6
+
+1. REST (Representational State Transfer) adalah gaya arsitektur untuk merancang web API, bukan library atau format data. Karena itu, API yang mengembalikan JSON belum tentu RESTful. Yang menentukan adalah cara API tersebut diatur. 
+
+PUT mengirim representasi pengganti, jadi semua field wajib dikirim. Pada test saya, PUT yang hanya berisi `title` ditolak dengan 400 karena `description` dan field wajib lain tidak ada. PATCH hanya mengirim field yang ingin diubah (`partial=True`), field lain tetap memakai nilai lama.
+- Contoh PATCH: Editor memperbaiki salah ketik pada judul pengalaman lewat modal edit.
+- Contoh PUT: klien menyimpan seluruh isi sebuah form lalu menggantikan data lama sekaligus, atau menyinkronkan data dari sumber lain yang.
+
+2. Serializer di DRF bekerja dua arah. Saat GET, ia mengubah objek model menjadi tipe data Python yang dapat dirender menjadi JSON (serialization). Saat POST/PUT/PATCH, ia memvalidasi input dan mengubahnya menjadi `validated_data` yang siap disimpan (deserialization). Hasil serializer belum berupa string JSON tapi renderer DRF yang mengubahnya.
+Dibanding merakit dictionary manual dengan `JsonResponse` di Tutorial 05:
+- Tidak ada lagi perulangan manual yang harus diulang untuk setiap model.
+- Validasi ada di satu tempat dan dipakai bersama oleh POST, PUT, dan PATCH, dengan format error per field yang konsisten (`{"title": ["..."]}`) dan status 400 otomatis lewat `is_valid(raise_exception=True)`.
+- Field read-only melindungi data: klien tidak bisa memalsukan `star_count` atau `id` lewat input.
+- Daftar field rahasia mencegah data sensitif (email, password hash) ikut terkirim.
+- Bentuk data lebih sederhana dan datar (`item.id`, `item.title`), bukan `{"pk": ..., "fields": {...}}`.
+
+3. Autentikasi menjawab "siapa kamu", sedangkan otorisasi menjawab "apa yang boleh kamu lakukan". Di DRF keduanya dipisah. `SessionAuthentication` mengenali session dari login Django dan mengisi `request.user` (pengunjung tanpa login dianggap anonim). Setelah itu, permission class memutuskan apakah request boleh diteruskan: `IsPortfolioOwnerOrEditorOrReadOnly` untuk daftar/detail dan `IsAuthenticated` untuk star. Urutannya: autentikasi, permission, pengecekan method, lalu isi view. Karena itu pengunjung anonim yang memanggil endpoint tulis mendapat 403 sebelum view dijalankan.
+
+Hak akses harus dicek di server karena menyembunyikan tombol hanya mengatur tampilan. Siapa pun dapat membuka DevTools, mengubah variabel seperti `IS_SUPERUSER`, atau mengirim `fetch`/`curl` langsung ke `/api/v1/...` tanpa melewati page sama sekali. Tombol yang disembunyikan hanya memperbaiki pengalaman pengguna, sedangkan permission class yang benar-benar menjaga data.
+
+4. SessionAuthentication mengenali pengguna lewat cookie session, dan browser mengirim cookie itu otomatis ke situs yang sama, termasuk ketika request dipicu oleh halaman situs lain. Tanpa token CSRF, orang yang tak dikenal dapat membuat orang yang sedang login mengirim POST atau DELETE ke API saya, dan server mengira itu tindakan dari pemilik web. Token CSRF adalah nilai rahasia yang tidak dapat dibaca situs lain karena same-origin policy, sehingga hanya halaman saya yang bisa mengirimnya lewat header `X-CSRFToken`. DRF memeriksanya untuk POST, PUT, PATCH, dan DELETE dari pengguna yang terautentikasi lewat session. 
+
+`force_authenticate` tidak cukup karena ia mengisi `request.user` secara langsung dan melewati proses autentikasi session, padahal pemeriksaan CSRF dijalankan di dalam `SessionAuthentication`. Akibatnya, request tanpa token pun akan berhasil dan test tetap hijau, sehingga tidak membuktikan apa-apa. Karena itu saya menulis test dengan `APIClient(enforce_csrf_checks=True)` dan `.login()`: POST tanpa token ditolak 403 dan tidak ada data tersimpan, sedangkan POST dengan token dari cookie berhasil (201).
