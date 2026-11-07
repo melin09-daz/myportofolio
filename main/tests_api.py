@@ -110,13 +110,29 @@ class ProjectAPITest(APITestCase):
         self.assertEqual(response.data["star_count"], 0)
         self.assertFalse(response.data["is_starred"])
 
-    def test_staff_and_editor_cannot_manage_tutorial_projects(self):
+    def test_editor_can_update_but_not_create_or_delete_projects(self):
+        editor = User.objects.create_user(username="editor-user", password="test-password")
+        editor.groups.add(Group.objects.create(name="Editor"))
+        self.client.force_authenticate(user=editor)
+        response = self.client.patch(self.detail_url, {"title": "Diubah Editor"}, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.project.refresh_from_db()
+        self.assertEqual(self.project.title, "Diubah Editor")
+        self.assertEqual(self.project.description, "My website")
+        self.assertEqual(self.client.put(self.detail_url, self.payload, format="json").status_code, 200)
+        self.assertEqual(self.client.post(self.list_url, self.payload, format="json").status_code, 403)
+        self.assertEqual(self.client.delete(self.detail_url).status_code, 403)
+        self.assertTrue(Project.objects.filter(pk=self.project.id).exists())
+        self.assertEqual(Project.objects.count(), 1)
+
+    def test_staff_without_editor_group_cannot_manage_projects(self):
         self.visitor.is_staff = True
         self.visitor.save()
-        self.visitor.groups.add(Group.objects.create(name="Editor"))
         self.client.force_authenticate(user=self.visitor)
         response = self.client.patch(self.detail_url, {"title": "Changed"}, format="json")
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.project.refresh_from_db()
+        self.assertEqual(self.project.title, "Portfolio")
 
     def test_wrong_method(self):
         self.client.force_authenticate(user=self.owner)
@@ -140,6 +156,30 @@ class ProjectAPITest(APITestCase):
             self.list_url, self.payload, format="json", HTTP_X_CSRFTOKEN=token,
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+
+    def test_owner_patch_can_clear_optional_urls(self):
+        self.project.demo_url = "https://example.com/"
+        self.project.save()
+        self.client.force_authenticate(user=self.owner)
+        response = self.client.patch(
+            self.detail_url,
+            {"title": "Judul Baru", "category": "web-dev", "demo_url": None},
+            format="json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.project.refresh_from_db()
+        self.assertEqual(self.project.title, "Judul Baru")
+        self.assertIsNone(self.project.demo_url)
+
+    def test_edit_modal_only_rendered_for_owner_and_editor(self):
+        editor = User.objects.create_user(username="editor-user", password="test-password")
+        editor.groups.add(Group.objects.create(name="Editor"))
+        page = reverse("main:show_project")
+        for user, expected in [(self.visitor, False), (editor, True), (self.owner, True)]:
+            self.client.force_login(user)
+            html = self.client.get(page).content.decode()
+            self.assertEqual('id="project-edit-form"' in html, expected, user.username)
 
 
 class ExperienceAPITest(APITestCase):
@@ -271,7 +311,6 @@ class ExperienceAPITest(APITestCase):
 
 
 class ExperienceLegacyViewConsistencyTest(APITestCase):
-
     def setUp(self):
         self.owner = User.objects.create_superuser("owner", "o@example.com", "test-password")
         self.visitor = User.objects.create_user("visitor", password="test-password")

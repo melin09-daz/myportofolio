@@ -161,6 +161,7 @@ def show_project(request):
         "name": "Amelinda Fedora Faragusti",
         "title_query": title_query,
         "form": ProjectForm(),
+        "edit_form": ProjectForm(auto_id="edit_%s"),
         "is_editor": is_editor(request.user),
         "can_edit": is_editor(request.user),
     }
